@@ -4,6 +4,7 @@ title: JavaScript 基础
 date: 2020-01-30 09:48:00 +0800
 authorize: Daren
 categories: Code
+nutshell: 几十分钟掌握JS基础
 ---
 
 ## 前言
