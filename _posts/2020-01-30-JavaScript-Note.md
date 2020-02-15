@@ -557,6 +557,8 @@ return num > 0 ? "positive" : num < 0 ? : "negative" : "zero";
 
 ```
 
+![](https://raw.githubusercontent.com/heidaren0000/blogGallery/master/imgs/3-way-operator.png)
+
 ### 严格模式 (strict mode)
 
 在 JS 中可以使用严格模式, 来提早知道代码中的错误, 减少怪异行为, 提高运行效率
