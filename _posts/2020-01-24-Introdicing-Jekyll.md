@@ -3,7 +3,7 @@ layout: post
 title: "Jekyll 入手: 基本操作"
 date: 2020-01-24 11:12:06 +0800
 authorize: Daren
-categories: jekyll
+categories: Jekyll
 nutshell: 简要介绍如何使用 Jekyll
 ---
 
