@@ -1,0 +1,587 @@
+
+
+
+
+## 1. 简介 Introduction
+
+NPM(NodeJS Package Manager), 是 NodeJS 的包管理工具. 通过 NPM 可以下载到数以十万计的自由的,高可用性的 NodeJS 工具.
+
+官网: www.npmjs.com
+
+要注意的是 npm 和 NodeJS 分开开发的, 只是安装的时候会同时安装而已.
+
+```shell
+npm i -g npm@5.5.1
+# i : 安装参数
+# -g : 全局安装
+# @ : 指定版本号
+```
+
+## 2. package.json
+
+在向项目中添加 npm 包之前, 你需要现在你的项目中建立一个 package.json. 这个文件包含了你的项目的元数据(metadata), 比如作者, GitHub 的源地址等等. 要方便快捷的创建 package.json ,可以使用
+
+```shell
+npm init
+```
+
+```shell
+MacBook-Pro:npm-demo daren$ npm init
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help json` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (npm-demo) # 项目的包名
+version: (1.0.0) # 项目的版本号
+description: npm-demo # 项目的描述
+entry point: (index.js) # 项目的进入点(一般就是 index.js 或者 app.js)
+test command: 
+git repository: 
+keywords: 
+author: 
+license: (ISC) 
+About to write to /Users/daren/Desktop/npm-demo/package.json:
+
+{
+  "name": "npm-demo",
+  "version": "1.0.0",
+  "description": "npm-demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+
+Is this OK? (yes) 
+
+┌──────────────────────────────────────────────────────────┐
+│                 npm update check failed                  │
+│           Try running with sudo or get access            │
+│           to the local update config store via           │
+│ sudo chown -R $USER:$(id -gn $USER) /Users/daren/.config │
+└──────────────────────────────────────────────────────────┘
+MacBook-Pro:npm-demo daren$ 
+
+```
+
+按照这一套流程下来, 就可以方便的完成初始化.
+
+如果你想要所有的选项都保留默认, 直接
+
+```shell
+npm init --yes
+```
+
+## 3. 安装 Node 包 (Installing a Node package)
+
+要安装 npm 包, 执行下面的命令:
+
+```shell
+npm install 包名
+# install 可以用 i 来代替
+```
+
+安装 npm 包的过程中, 会产生下面的行为:
+
+- 将下载的包安装到 `node_modules` 文件夹中
+- 将下载的包名以及版本添加到 `package.json` 中的 `dependences`里, 无论安装是否成功, 都会添加进去.
+
+![](https://raw.githubusercontent.com/heidaren0000/blogGallery/master/imgs/1-1-1-package-json.png)
+
+## 4. 使用 npm 包 (using a package)
+
+要是用新下载的 package, 可以直接使用 require() 来导入包
+
+```javascript
+var _ = require('underscore');
+
+```
+
+你可能很好奇为什么这么写还能找到这个包, 其实这个`的`require()` 的用法是这样的:
+
+- 自带的模块 (core module)
+- 当前目录的文件或者文件夹 (file of folder)
+- 在 `node_modules`文件夹的内容 (node_modules)
+
+当你使用`-g`参数安装的 npm 包, 会被安装到 `core module` 中, 也可以被正常调用. 
+
+## 5. 包依赖 (Package Dependencies)
+
+假如我们要安装一个`mongoose`,
+
+```shell
+npm i mongoose
+```
+
+安装完了, 我们看一下`node_modules`文件夹:
+
+```shell
+MacBook-Pro:node_modules daren$ ls
+bl				ms
+bluebird			process-nextick-args
+bson				readable-stream
+core-util-is			regexp-clone
+debug				require_optional
+denque				resolve-from
+inherits			safe-buffer
+isarray				saslprep
+kareem				semver
+memory-pager			sift
+mongodb				sliced
+mongoose			sparse-bitfield
+mongoose-legacy-pluralize	string_decoder
+mpath				underscore
+mquery				util-deprecate
+MacBook-Pro:node_modules daren$ 
+
+```
+
+可以看到这里不止安装了 mongoose , 还安装了一堆包, mongoose 是我们项目的依赖包, 而这些包是 mongoose 的依赖包. 
+
+在老版本的 npm 中, 依赖包的依赖包都安装在依赖包目录自己的 'node_modules' 里面, 这种像套娃一样的结构使得一些包不得不重复安装, 而像 Windows 这种对路径长度有要求的操作系统下还有不能运行的可能.
+
+在新版本的 npm 中, 依赖包的依赖包, 会统一放在项目里统一的一个`node_modules`中, 所以`node_modules`文件夹中除了刚才安装的 mongoose, 还多了很多东西.
+
+而如果出现了同时需要一个依赖包, 并且版本出现冲突时(同一个包的两个版本被需要), 这时才会将依赖包安装到需要这个版本的包的`node_modules`目录里.
+
+## 6. NPM 包和软件配置管理 (NPM Packages and SCM)
+
+`node_modules`文件夹中存储了机会所有的依赖包, 这些依赖包在某些项目中甚至能达到上百兆, 当你需要使用像 git 这样的版本管理系统的时候, 为了节省时间, 没必要连带着`node_module`文件夹一同进行 commit, 直接放到 `.gitignore`文件中就可以了.
+
+如果你需要重新给项目安装依赖包,直接
+
+```shell
+npm i # 或者 install
+```
+
+就可以重新下载依赖包了.
+
+## 7. 语义版本号 (Semantic Versioning)
+
+语义版本号(Semantic Versioning) 被广泛采用, 比如我们打开 package.json 就会看到依赖包的版本命名就是用的语义版本号(Semantic Versioning .aka SemVer)
+
+![](https://raw.githubusercontent.com/heidaren0000/blogGallery/master/imgs/7-1-1-semantic-Versioning.png)
+
+这种版本号就是三组数字
+
+Major.Minor.Patch 
+
+主要版本.小版本.补丁版本
+
+- 补丁版本: 主要是修复 bug 或者修复安全问题, 不会对 API 进行改动
+- 小版本: 增加功能, 不会破坏原有 API
+- 主要版本: 可能会修改某些 API, 导致依赖这个的包不能正常工作.
+
+还有些特殊的符号, 比如`^`(Caret)和`~`(Tilde)
+
+- `^`主要版本不变即可 4.X
+- `~`主要版本和小版本都不能变 1.8.X
+
+如果你想要保持版本号不变, 那么就直接写数字就好, 不用在前面加特殊符号了就.
+
+## 8. 列出已安装包(Listing the Installed Packages)
+
+### 1. 看 `node_module`
+
+直接在`node_module`文件夹找到这个包, 点进去看 package.json 就行.
+
+![](https://raw.githubusercontent.com/heidaren0000/blogGallery/master/imgs/8-1-1-check-pacakge-version.png)
+
+上面的方法看多个包的版本会很痛苦, 下面的方法更好些
+
+### 2. 命令行工具
+
+```shell
+npm list
+```
+
+这个命令可以直接看到已经安装好的所有的包.
+
+```shell
+MacBook-Pro:node_modules daren$ npm list
+npm-demo@1.0.0 /Users/daren/Desktop/npm-demo
+├─┬ mongoose@5.9.1
+│ ├── bson@1.1.3
+│ ├── kareem@2.3.1
+│ ├─┬ mongodb@3.5.3
+│ │ ├─┬ bl@2.2.0
+│ │ │ ├─┬ readable-stream@2.3.7
+│ │ │ │ ├── core-util-is@1.0.2
+│ │ │ │ ├── inherits@2.0.4
+│ │ │ │ ├── isarray@1.0.0
+│ │ │ │ ├── process-nextick-args@2.0.1
+│ │ │ │ ├── safe-buffer@5.1.2 deduped
+│ │ │ │ ├─┬ string_decoder@1.1.1
+│ │ │ │ │ └── safe-buffer@5.1.2 deduped
+│ │ │ │ └── util-deprecate@1.0.2
+│ │ │ └── safe-buffer@5.1.2 deduped
+│ │ ├── bson@1.1.3 deduped
+│ │ ├── denque@1.4.1
+│ │ ├─┬ require_optional@1.0.1
+│ │ │ ├── resolve-from@2.0.0
+│ │ │ └── semver@5.7.1
+│ │ ├── safe-buffer@5.1.2 deduped
+│ │ └─┬ saslprep@1.0.3
+│ │   └─┬ sparse-bitfield@3.0.3
+│ │     └── memory-pager@1.5.0
+│ ├── mongoose-legacy-pluralize@1.0.2
+│ ├── mpath@0.6.0
+│ ├─┬ mquery@3.2.2
+│ │ ├── bluebird@3.5.1
+│ │ ├─┬ debug@3.1.0
+│ │ │ └── ms@2.0.0
+│ │ ├── regexp-clone@1.0.0 deduped
+│ │ ├── safe-buffer@5.1.2 deduped
+│ │ └── sliced@1.0.1 deduped
+│ ├── ms@2.1.2
+│ ├── regexp-clone@1.0.0
+│ ├── safe-buffer@5.1.2
+│ ├── sift@7.0.1
+│ └── sliced@1.0.1
+└── underscore@1.9.2
+
+
+┌──────────────────────────────────────────────────────────┐
+│                 npm update check failed                  │
+│           Try running with sudo or get access            │
+│           to the local update config store via           │
+│ sudo chown -R $USER:$(id -gn $USER) /Users/daren/.config │
+└──────────────────────────────────────────────────────────┘
+MacBook-Pro:node_modules daren$ 
+
+```
+
+还可以规定查看的深度, 比如我只想看项目本身的包, 而不是依赖包的包, 那么可以规定深度为 0.
+
+```shell
+npm list --depth=0
+```
+
+```shell
+MacBook-Pro:node_modules daren$ npm list --depth=0
+npm-demo@1.0.0 /Users/daren/Desktop/npm-demo
+├── mongoose@5.9.1
+└── underscore@1.9.2
+
+
+┌──────────────────────────────────────────────────────────┐
+│                 npm update check failed                  │
+│           Try running with sudo or get access            │
+│           to the local update config store via           │
+│ sudo chown -R $USER:$(id -gn $USER) /Users/daren/.config │
+└──────────────────────────────────────────────────────────┘
+MacBook-Pro:node_modules daren$ 
+
+```
+
+## 9. 查看 npm 包的注册信息 (viewing registry information about npm packages)
+
+### 1. 去官网
+
+在 npmjs.com 可以查到这个 npm 包相关信息
+
+![](https://raw.githubusercontent.com/heidaren0000/blogGallery/master/imgs/9-1-1-npmjs-info.png)
+
+### 2. 命令行 npm view
+
+使用下面的命令也能查到包的相关信息
+
+```shell
+npm view 包名
+```
+
+```shell
+MacBook-Pro:node_modules daren$ npm view mongoose
+
+mongoose@5.9.1 | MIT | deps: 11 | versions: 575
+Mongoose MongoDB ODM
+https://mongoosejs.com
+
+dist
+.tarball: https://registry.npm.taobao.org/mongoose/download/mongoose-5.9.1.tgz
+.shasum: 48a5fafe6bc7b57d6b41b12ebf55fa5f609518d6
+
+dependencies:
+bson: ~1.1.1                     ms: 2.1.2                        
+kareem: 2.3.1                    regexp-clone: 1.0.0              
+mongodb: 3.5.3                   safe-buffer: 5.1.2               
+mongoose-legacy-pluralize: 1.0.2 sift: 7.0.1                      
+mpath: 0.6.0                     sliced: 1.0.1                    
+mquery: 3.2.2                    
+
+maintainers:
+- aaron <aaron.heckmann+github@gmail.com>
+- rauchg <rauchg@gmail.com>
+- tjholowaychuk <tj@vision-media.ca>
+- vkarpov15 <valkar207@gmail.com>
+
+dist-tags:
+latest: 5.9.1    legacy: 4.13.19  unstable: 3.9.7  
+
+published 3 days ago by vkarpov15 <val@karpov.io>
+
+┌──────────────────────────────────────────────────────────┐
+│                 npm update check failed                  │
+│           Try running with sudo or get access            │
+│           to the local update config store via           │
+│ sudo chown -R $USER:$(id -gn $USER) /Users/daren/.config │
+└──────────────────────────────────────────────────────────┘
+MacBook-Pro:node_modules daren$ 
+```
+
+要是感觉信息太多太乱, 还可以直接看相关的属性, 下面举例子查看 mongoose 的依赖信息:
+
+```shell
+npm view mongoose dependencies
+```
+
+```shell
+MacBook-Pro:node_modules daren$ npm view mongoose dependencies
+ 
+{ bson: '~1.1.1',
+  kareem: '2.3.1',
+  mongodb: '3.5.3',
+  'mongoose-legacy-pluralize': '1.0.2',
+  mpath: '0.6.0',
+  mquery: '3.2.2',
+  ms: '2.1.2',
+  'regexp-clone': '1.0.0',
+  'safe-buffer': '5.1.2',
+  sliced: '1.0.1',
+  sift: '7.0.1' }
+```
+
+还可以列出这个包的所有版本, 还拿 mongoose 举例
+
+```shell
+node view mongoose versions
+```
+
+## 10. 安装特定版本软件包 (Installing a Specific Version of a Package)
+
+有时候需要安装的版本不是最新版, 可以通过下面的方法安装, 拿 mongoose 举例
+
+```shell
+npm i mongoose@4.5.1
+```
+
+用`@`后面接版本号的方式来进行指定版本号, 这么安装之后, package.json 中的版本号也会是这个版本.
+
+## 11. 升级包版本(Updating Local Packages)
+
+可以用下面的命令来检查包是否已经过时(outdated):
+
+```shell
+npm outdated
+```
+
+这里用`underscore`来举例, 
+
+```shell
+MacBook-Pro:node_modules daren$ npm outdated
+Package     Current  Wanted  Latest  Location
+underscore    1.4.0   1.9.2   1.9.2  npm-demo
+MacBook-Pro:node_modules daren$ 
+```
+
+可以看到这里有三个版本, Current(当前版本), Wanted(所需版本), Latest(最新版本).
+
+- 当前版本: 目前正在使用的版本
+- 所需版本: 根据package.json推算出的版本, 比如`^2.1.0`会按照大版本号`2.X.X`进行更新. `~2.1.0`会按照小版本号`2.1.X`进行更新. 由于大版本可能会破坏原有的 API, 所以有的时候并不是最新版就最好, 而是在合适的情况下选择最适合的版本.
+- 最新版本: 就是最新版本
+
+如果想要升级包的话, 可以使用命令
+
+```shell
+npm update
+```
+
+这么做会升级到最新的所需版本, 但是不一定是最新版本.
+
+如果要升级到最新版本, 可以使用一个 npm 包, 叫做 `npm-check-updates`(别忘了s)
+
+```shell
+npm i --g npm-check-updates
+```
+
+然后就可以方便的检查是否有可以升级到最新版的包
+
+```shell
+MacBook-Pro:node_modules daren$ npm-check-updates
+Checking /Users/daren/Desktop/npm-demo/package.json
+[====================] 2/2 100%
+
+ underscore  ^1.4.0  →  ^1.9.2 
+
+Run ncu -u to upgrade package.json
+
+
+```
+
+注意这里只是进行了检查, 没有任何的操作. 在 shell 输出的最后一行可以看到:‘Run ncu -u to upgrade package.json’, 执行 `ncu -u` 来对 package.json 进行更新. `ncu` 就是`np-check-updates`的缩写.
+
+```shell
+ncu -u
+```
+
+这个执行之后只是更新了 package.json 中的依赖版本号, 并没有进行真正的包更新, 现在我们还要进行`npm install`重建依赖包的结构
+
+```shell
+npm install
+```
+
+## 12. 开发用途依赖包(DevDependencies)
+
+有时候有的包是用来 debug 用的, 并不会在部署的时候用到. 这时候就要用到 开发用途依赖包(DevDependencies), 这种依赖包在部署的时候不会被安装.
+
+这里用 js 的 debug 工具 jshint 安装成开发用依赖包进行举例:
+
+```shell
+MacBook-Pro:node_modules daren$ sudo npm install jshint --save-dev
+Password:
+npm WARN npm-demo@1.0.0 No repository field.
+
++ jshint@2.11.0
+added 29 packages from 15 contributors and removed 1 package in 2.073s
+MacBook-Pro:node_modules
+```
+
+安装完成之后,  package.json 也有了相应的变化:
+
+```json
+  "dependencies": {
+    "mongoose": "^5.9.1",
+    "underscore": "^1.9.2"
+  },
+  "devDependencies": {
+    "jshint": "^2.11.0"
+  }
+```
+
+多了一个专门的代码块`devDependencies`
+
+而 jshint 安装的位置还是在 `node_modules` 中.
+
+## 13. 删除包(Uninstalling Packages)
+
+还是拿 mongoose 举例
+
+```shell
+npm uninstall mongoose
+# uninstall 也可以简写成 un
+```
+
+在这之后, mongoose 就会被 package.json 和 node_modules 中移除.
+
+## 14. 全局包(Working with Global Packages)
+
+默认情况之下使用`npm i`只会在本地的项目中安装依赖包. 然而有的包更适合在全局中使用, 比如像 `lodash` 和 `underscore` 还有一些命令行工具, 像`npm`本身就是在全局安装的命令行工具, 或者`vue/cli`等等.
+
+要安装全局的包, 可以在原来的安装命令上带一个`-g`参数
+
+```shell
+npm i -g vue
+```
+
+其实大部分的包管理命令要上升到全局都可以通过带一个`-g`来进行
+
+```shell
+npm outdated -g
+npm uninstall -g
+ncu -g
+...
+```
+
+## 15. 发布一个包 (Publish a Package)
+
+你也可以发布自己写的包
+
+### 1. 注册账户
+
+使用`npm adduser`来注册一个仓库(repository)
+
+```shell
+MacBook-Pro:node_modules daren$ npm adduser
+Username: heidaren0000
+Password: 
+Email: (this IS public) heidaren0000@gmail.com
+Logged in as heidaren0000 on http://registry.npm.taobao.org/.
+```
+
+### 2. 登陆
+
+使用`npm login`来进行登录
+
+```shell
+MacBook-Pro:node_modules daren$ npm login
+Username: (heidaren0000) 
+Password: (<default hidden>) 
+Email: (this IS public) (heidaren0000@gmail.com) 
+Logged in as heidaren0000 on http://registry.npm.taobao.org/.
+```
+
+### 3. 发布
+
+这里写了一个简单的小项目`daren-Hello`, 可以执行简单的加法. 我们把它发布一下, 用`npm publish`
+
+```shell
+MacBook-Pro:daren-hello daren$ npm publish
+npm notice 
+npm notice 📦  daren-hello@1.0.0
+npm notice === Tarball Contents === 
+npm notice 229B package.json
+npm notice 46B  index.js    
+npm notice === Tarball Details === 
+npm notice name:          daren-hello                             
+npm notice version:       1.0.0                                   
+npm notice package size:  328 B                                   
+npm notice unpacked size: 275 B                                   
+npm notice shasum:        7af193a7ef2e6ddfccbbe05df9f496d369d6614d
+npm notice integrity:     sha512-TciwyV/8/UHLd[...]/bqF+0LHJbm9Q==
+npm notice total files:   2                                       
+npm notice 
+npm ERR! code E403
+npm ERR! 403 Forbidden - PUT http://registry.npm.taobao.org/daren-hello - [no_perms] Private mode enable, only admin can publish this module
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /Users/daren/.npm/_logs/2020-02-18T14_56_45_925Z-debug.log
+```
+
+但是这里明显就是没有发布上, 因为我用的源是淘宝的`cnpm`, 它的管理员开了`private mode`, 只有管理员才能发布包.
+
+### 4.使用
+
+如果能发布成功的话, 就可以直接用`npm install`来安装了.
+
+发布的过程中`package.json`会自动增加一些元数据(meta data), 看起来会和原来的有点区别.
+
+## 16. 更新已发布的包(Updating a Published Package)
+
+发布更新的时候只要注意版本号不能比以前更旧就可以用`npm publish`对自己的源中的 npm 软件包进行更新.
+
+所以可以使用`npm version`来刷版本号
+
+```shell
+npm version major 
+# 更新主要版本, 也就是主要版本号 +1
+npm version minor
+# 更新小版本号, 也就是小版本号 +1
+npm version patch
+# 更新补丁版本号, 补丁版本号 +1
+```
+
+```shell
+MacBook-Pro:daren-hello daren$ npm version minor
+v1.1.0
+```
+
+就是这样. 然后就能用 `npm publish` 更新源中的包了.
