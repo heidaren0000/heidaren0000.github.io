@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>NodeJS(四) Express | Daren’s Daliy</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="NodeJS(四) Express" />
+<meta name="author" content="黑大任" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="1. 简介" />
+<meta property="og:description" content="1. 简介" />
+<link rel="canonical" href="http://localhost:4000/node/2020/03/05/NodeJS(4)-Express.html" />
+<meta property="og:url" content="http://localhost:4000/node/2020/03/05/NodeJS(4)-Express.html" />
+<meta property="og:site_name" content="Daren’s Daliy" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-05T23:53:00+08:00" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/node/2020/03/05/NodeJS(4)-Express.html","headline":"NodeJS(四) Express","dateModified":"2020-03-05T23:53:00+08:00","datePublished":"2020-03-05T23:53:00+08:00","author":{"@type":"Person","name":"黑大任"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/node/2020/03/05/NodeJS(4)-Express.html"},"description":"1. 简介","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Daren's Daliy" /></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Daren&#39;s Daliy</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/">Posts</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">NodeJS(四) Express</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-03-05T23:53:00+08:00" itemprop="datePublished">Mar 5, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="1-简介">1. 简介</h2>
+
+<p>之前用 http 模块的 server 中的回调函数, 可以简单的对 http 请求作出回复, 但是那里面的 if 也太多了, 不实用.</p>
+
+<p>这节要讲的 Express 就会解决大部分问题.</p>
+
+<h2 id="2-restful-服务-restful-services">2. RESTful 服务 (RESTful Services)</h2>
+
+<p>RESTful 服务也被称为 RESTful API , 这是一种 API 的风格. 经常用于客户端和服务端的交互.</p>
+
+<p>REST 的全拼是 <code class="highlighter-rouge">RepresentationalStateTransfer</code>, 因为这个东西是博士生提出来的, 所看起来很高大上, 实际也就那样呗.</p>
+
+<p>客户端(前端)与服务器的交互, 一般就是通过<code class="highlighter-rouge">HTTP</code>协议(Protocol)来进行的. 一共有四个操作: CRUD(Create, Read, Update, Delete), 也就是增删改查, 而与之对应的 HTTP 请求动作, 分别就是 <code class="highlighter-rouge">POST</code>, <code class="highlighter-rouge">DELETE</code>, <code class="highlighter-rouge">PUT</code>, <code class="highlighter-rouge">GET</code>, 你想要实现相关的功能, 就可以使用相关的动作.</p>
+
+<p>一般情况下, RESTful 风格的 API 都是在专门的域名或者子域名下的, 方便调用. 而不同的 API 也有不同的地址.</p>
+
+<p>简而言之, RESTful 就是使用简单, 有意义的地址来作为 API</p>
+
+<h2 id="3-介绍-express-introducing-express">3. 介绍 Express (Introducing Express)</h2>
+
+<p>Express 的目的主要是为了解决 http module 中使用回调函数来处理 http 请求过于复杂的问题.</p>
+
+<p>在 Node 社区中, Express 被大量使用, 每周都有超过一千万次下载, 这个包轻量, 快速, 而且又很完善的文档.</p>
+
+<p><img src="https://raw.githubusercontent.com/heidaren0000/blogGallery/master/imgs/2-1-download-count.png" alt="" /></p>
+
+<p>要安装 Express, 使用</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm i express
+</code></pre></div></div>
+
+<h2 id="4-建立第一个服务器building-your-first-web-server">4. 建立第一个服务器(Building Your First Web Server)</h2>
+
+<p>当导入 require(‘express’) 时, 导入的是一个函数, 而这个函数会返回 express 对象, 一般被称作 express 应用程序, 这面还有一些简单的方法, 像 <code class="highlighter-rouge">app.get()</code>, <code class="highlighter-rouge">app.post()</code>, <code class="highlighter-rouge">app.put()</code>, <code class="highlighter-rouge">app.delete()</code> 等等, 对应相应的 HTTP 方法</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">);</span> <span class="c1">// 这里导入的是函数</span>
+<span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="c1">// route</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;title&gt;Helloworld&lt;/title&gt;Helloworld</span><span class="dl">'</span><span class="p">);</span> <span class="c1">// route handler</span>
+<span class="p">});</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="dl">'</span><span class="s1">3000</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Listening on por 3000</span><span class="dl">'</span><span class="p">));</span>
+
+</code></pre></div></div>
+
+<p>其中的<code class="highlighter-rouge">get()</code>方法的回调方法中的 req 和 res 都是 express 的对象 <code class="highlighter-rouge">request</code> 和 <code class="highlighter-rouge">reponse</code>, 这两个对象的属性和方法可以直接在官网查到. 每一个<code class="highlighter-rouge">get()</code>的代码块被称为一个路径(route), 其中的回调函数被称为路径处理器(router handler).</p>
+
+<p>还有一点是这里并没有用 if-else 来处理选择情况, 而是使用多个 get() 方法来设置 routes, 随着写不同的模块, 这些 routs 可以被移动到别的位置.</p>
+
+<p><code class="highlighter-rouge">app.listen()</code>方法中的两个参数为端口和回调函数.</p>
+
+<p>这些 router 在大项目项目中会被分开放在不同的 module 里面, 还要和数据库进行交互.</p>
+
+<p><img src="https://raw.githubusercontent.com/heidaren0000/blogGallery/master/4-4-1%20setHelloworld.png" alt="" /></p>
+
+<h2 id="5-nodemon">5. Nodemon</h2>
+
+<p>前面我们使用 node 运行 js 文件的时候, 假如你对某个文件作出了修改, 那么你就得重启 node 才能看到效果. 如果你用过 Jekyll, 你会发现修改 Jekyll 的文章之后不需要在命令行里重启 Jekyll 直接就能看到.</p>
+
+<p>在 node 中也有这样的插件Nodemon, 这是个在 CLI 里面运行的插件, 所以要安装到全局.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node i <span class="nt">-g</span> nodemon
+</code></pre></div></div>
+
+<p>装好之后, 直接用<code class="highlighter-rouge">nodemon</code>来代替之前的<code class="highlighter-rouge">node</code>即可</p>
+
+<p><img src="https://raw.githubusercontent.com/heidaren0000/blogGallery/master/4-5-1-use-nodemon.png" alt="" /></p>
+
+<p>现在 nodemon 就会根据你的修改实时进行刷新, 不再需要重启 node 就可以看到修改的效果了.</p>
+
+<h2 id="6-环境变量-environment-variables">6. 环境变量 (Environment Variables)</h2>
+
+<p>上个例子里我们把监听的端口设置成了 3000, 但是在生产环境中这个端口不一定是 3000, 比如别的服务已经占用 3000 端口了, 那么这个端口就必须随机应变. 问题来了: 难道到时候再翻代码找到这个语句吗? 太费劲了吧… 一个比较好的方法就是使用环境变量(Environment Variables).</p>
+
+<p>顾名思义, 环境变量(Environment Variables)并不是来自程序代码里的变量,  而是来自程序外部的运行环境(Host Environment), 从运行环境中获取的环境变量. 在配置 JDK 的时候那个环境变量, 就是这个环境变量.</p>
+
+<p>要在程序中读取环境变量, 我们可以使用 node 自带的对象 <code class="highlighter-rouge">process</code>.</p>
+
+<p>访问 <code class="highlighter-rouge">process.env.[变量名]</code> 即可访问相关的环境变量.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;title&gt;Helloworld&lt;/title&gt;Helloworld</span><span class="dl">'</span><span class="p">);</span>
+    <span class="c1">//res.send('Helloworld');</span>
+<span class="p">})</span>
+
+<span class="kd">const</span> <span class="nx">port</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">;</span>
+<span class="c1">// 这里如果访问没有 PORT 这个环境变量的话默认使用 3000 端口.</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Listening on port </span><span class="p">${</span> <span class="nx">port</span> <span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+  <span class="c1">// 用 backtic 代替了 single quote, 方便使用模版字符串</span>
+<span class="p">})</span>
+
+</code></pre></div></div>
+
+<p>现在, 如果你的电脑里面 <code class="highlighter-rouge">PORT</code> 这个环境变量的话, 他就会自动使用环境变量作为监听端口. 如果没有这个变量也不至于炸, 还有 3000 端口在后面顶着呢.</p>
+
+<p>怎么给自己添加环境变量呢? 这里介绍一下怎么给 Linux 和 macOS 来设置环境变量(个人认为给 Windows 这样的系统上跑 node 有点不现实…).</p>
+
+<p><strong>要临时设置环境变量</strong>, 可以使用<code class="highlighter-rouge">export</code>命令.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span>PORT <span class="o">=</span> 5000
+</code></pre></div></div>
+
+<p>按下回车, 你的环境变量就多了一个值为 5000 的 PORT 变量.</p>
+
+<p>注意这个变量只能在当前回话(session)有效, 如果你把这个 terminal 窗口关上了, 就不能用了.</p>
+
+<p><strong>要给当前用户设置环境变量</strong>, 可以编辑当前用户目录下的终端配置文件, 这里不同的终端不一样, bash 的配置文件是当前用户目录下的 <code class="highlighter-rouge">.bash_profile</code>, 在里面添加 export 语句即可</p>
+
+<p><strong>给所有用户设置环境变量</strong>, 这个可以直接编辑<code class="highlighter-rouge">/etc/profile</code>, 在最后一行添加 export 语句即可.</p>
+
+<h2 id="7-路由参数-router-parameters">7. 路由参数 (Router Parameters)</h2>
+
+<p>对于复杂的网站不可能对每一个页面都做一个 router, 这时候可以用路由参数(Router Parameter) 来提高代码的复用性.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/param/:name/:say</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="c1">// 定义了两个参数 name 和 say</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">);</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p>要使用 get 方法的 router parameter,  需要在参数名前面加一个 <code class="highlighter-rouge">:</code>,  比如上面的 <code class="highlighter-rouge">:name</code>, <code class="highlighter-rouge">:say</code>, 而参数会以 <code class="highlighter-rouge">params</code> 对象的形式传入函数内, 可以用 <code class="highlighter-rouge">res.send()</code> 方法返回.</p>
+
+<p><img src="https://raw.githubusercontent.com/heidaren0000/blogGallery/master/4-7-1-returntopage.png" alt="" /></p>
+
+<p>路由参数用来访问的是资源, 如果你想向服务器发送信息, 还可以使用 查询参数(Query Parameter), 这个参数可以从浏览器像服务器传递变量.</p>
+
+<p>使用查询参数不需要在 node 中单独进行规定, 只需要将 <code class="highlighter-rouge">?</code> 分隔符接在 URL 的后面加上<code class="highlighter-rouge">[变量名]=[值]]</code></p>
+
+<pre><code class="language-url">http://localhost:3000/param/wooh/hello?Set=123
+</code></pre>
+
+<p>跟路由参数类似, 之后这个值会被传入回调方法中的 query 对象中, 直接访问即可.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;title&gt;Helloworld&lt;/title&gt;Helloworld</span><span class="dl">'</span><span class="p">);</span>
+    <span class="c1">//res.send('Helloworld');</span>
+<span class="p">})</span>
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/param/:name/:say</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">);</span>
+<span class="p">})</span>
+
+<span class="kd">const</span> <span class="nx">port</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">3000</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Listening on port </span><span class="p">${</span> <span class="nx">port</span> <span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p><img src="https://raw.githubusercontent.com/heidaren0000/blogGallery/master/4-7-2-query-parameter.png" alt="" /></p>
+
+<h2 id="8-处理-get-请求-handle-get-request">8. 处理 GET 请求 (Handle GET Request)</h2>
+
+<p>之前的代码已经能实现简单的 GET 了, 但是没有说明在找不到资源的情况</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+
+<span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="na">id</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">daren</span><span class="dl">'</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">id</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">hei</span><span class="dl">'</span><span class="p">},</span>
+    <span class="p">{</span><span class="na">id</span> <span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">jhon</span><span class="dl">'</span><span class="p">}</span>
+<span class="p">];</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api/:id</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">dat</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span> <span class="nx">d</span> <span class="o">=&gt;</span> <span class="nx">d</span><span class="p">.</span><span class="nx">id</span> <span class="o">===</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">));</span>
+  	<span class="c1">// 返回 404</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">dat</span><span class="p">)</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">404</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">Can not find resources</span><span class="dl">'</span><span class="p">);</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">dat</span><span class="p">);</span>
+<span class="p">})</span>
+
+
+<span class="kd">const</span> <span class="nx">port</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">`Listening on port </span><span class="p">${</span> <span class="nx">port</span> <span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+<span class="p">})</span>
+
+</code></pre></div></div>
+
+<h2 id="9-处理-post-请求-handle-post-request">9. 处理 POST 请求 (Handle Post Request)</h2>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">newData</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">id</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="na">name</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">name</span> <span class="c1">// 注意这里需要使用 中间件(middleWare)</span>
+    <span class="p">}</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">newData</span><span class="p">);</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">course</span><span class="p">);</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p>跟上面 GET 类似. 但是要让 express 正常解析 JSON 格式, 需要使用 json 中间件(MiddleWare) 对数据进一步处理.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+</code></pre></div></div>
+
+<h2 id="10-使用-postman-调试终端-calling-endpoints-using-postman">10. 使用 Postman 调试终端 (Calling Endpoints Using Postman)</h2>
+
+<h2 id="11-输入检验-input-validation">11. 输入检验 (Input Validation)</h2>
+
+<p>为了安全起见, 不能过分的信任服务端发来的数据, 我们要进行输入验证(Input Validation), 筛选出符合规范的内容, 过滤掉不符合标准的内容.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">name</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">||</span> <span class="o">!</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">400</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">Bad Request</span><span class="dl">'</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span> <span class="c1">// 防止下面的函数被继续执行</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">newData</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">id</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="na">name</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">name</span>
+    <span class="p">}</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">newData</span><span class="p">);</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">course</span><span class="p">);</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p>这是最简单的验证, 但是在某些情况下服务器要进行的检验比这复杂的多. 为了应对更加复杂的情况, 可以使用专用的模式(schema)检验工具 <code class="highlighter-rouge">JOI</code> 进行校验. 注意由于 require() 得到的 JOI 是一个类, 所以首字母大写.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nt">-i</span> joi
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">schema</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">name</span><span class="p">:</span> <span class="nx">Joi</span><span class="p">.</span><span class="nx">string</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="nx">required</span>
+    <span class="p">};</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">Joi</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">schema</span><span class="p">);</span>
+  	<span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">error</span><span class="p">)</span> <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">400</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">details</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">message</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">newData</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">id</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="na">name</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">name</span>
+    <span class="p">}</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">newData</span><span class="p">);</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">course</span><span class="p">);</span>
+<span class="p">})</span>
+
+</code></pre></div></div>
+
+<p>在正确的情况下, JOI 返回的对象中 Error 是空白的, Value 是有值的, 而当出错的时候 Value 是空白的, Error 是有值的.</p>
+
+<h2 id="12-处理put请求-handling-http-put-requests">12. 处理PUT请求 (Handling HTTP PUT Requests)</h2>
+
+<p>要处理 PUT 请求, 需要:</p>
+
+<ul>
+  <li>查找这个资源 (404)</li>
+  <li>检验这个资源是否符合要求 (400)</li>
+  <li>更新资源</li>
+  <li>返回结果</li>
+</ul>
+
+<p>由于 POST 和 PUT 都需要校验这个资源是否符合要求, 通常都是把校验单独拿出来放在一个函数里.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">checkVaild</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+    <span class="kd">const</span> <span class="nx">schema</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">name</span><span class="p">:</span> <span class="nx">Joi</span><span class="p">.</span><span class="nx">string</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="nx">min</span><span class="p">.</span><span class="nx">required</span>
+    <span class="p">};</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">Joi</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">schema</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>然后直接使用 put 方法</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api/put/:id</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="c1">// 使用 id 型参来查找资源是否存在</span>
+    <span class="kd">const</span> <span class="nx">dat</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span> <span class="nx">a</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="p">.</span><span class="nx">id</span> <span class="o">===</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span> <span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">dat</span><span class="p">)</span> <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">404</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">resources not found</span><span class="dl">'</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="p">{</span> <span class="nx">error</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">checkVaild</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span> <span class="c1">// 校验</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">400</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span> <span class="nx">error</span><span class="p">.</span><span class="nx">details</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">message</span> <span class="p">);</span>    <span class="p">}</span>
+    <span class="nx">dat</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span> <span class="c1">// 修改数据</span>
+  	<span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">dat</span><span class="p">);</span> <span class="c1">// 返回修改后的数据</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h2 id="13-处理-delete-指令handle-delete-request">13. 处理 DELETE 指令(Handle Delete Request)</h2>
+
+<ul>
+  <li>查找资源是否存在 (404)</li>
+  <li>删除</li>
+  <li>返回结果</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api/courses/:id</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">dat</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span> <span class="nx">a</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span> <span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">dat</span><span class="p">)</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">404</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="dl">'</span><span class="s1">Resources not found</span><span class="dl">'</span><span class="p">);</span>
+
+    <span class="kd">const</span> <span class="nx">indes</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">dat</span><span class="p">);</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">course</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h2 id="备注">备注</h2>
+
+<p>因为之前没有下好 POSTMAN,  没法调试前面的代码, 所以又把代码重写了一遍放在这里, 使用了这一节讲到的所有内容.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">express</span><span class="p">();</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+
+<span class="kd">const</span> <span class="nx">Joi</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">joi</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">schema</span> <span class="o">=</span> <span class="nx">Joi</span><span class="p">.</span><span class="nx">object</span><span class="p">({</span>
+    <span class="na">name</span><span class="p">:</span> <span class="nx">Joi</span><span class="p">.</span><span class="nx">string</span><span class="p">().</span><span class="nx">min</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="nx">max</span><span class="p">(</span><span class="mi">20</span><span class="p">).</span><span class="nx">required</span><span class="p">()</span>
+<span class="p">});</span>
+
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="na">id</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="na">name</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">daren</span><span class="dl">"</span>
+<span class="p">}]</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api/getinfo</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api/post</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">Joi</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">schema</span><span class="p">);</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+        <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span> <span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span> <span class="p">:</span> <span class="nx">result</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">name</span>
+    <span class="p">});</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api/update/:id</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">Joi</span><span class="p">.</span><span class="nx">validate</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="nx">schema</span><span class="p">);</span> 
+    <span class="kd">const</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">find</span><span class="p">((</span><span class="nx">a</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">if</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">id</span> <span class="o">===</span> <span class="nx">result</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="k">return</span> <span class="nx">a</span><span class="p">;</span> <span class="p">});</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">target</span><span class="p">)</span> <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Error 400 Not found resource</span><span class="dl">'</span><span class="p">);</span>
+    <span class="nx">target</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">to</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api/delete/:id</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">data</span><span class="p">[</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">400</span><span class="p">).</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">Error: Resources not found!</span><span class="dl">"</span><span class="p">);</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">})</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Listening on port 3000</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+
+  </div><a class="u-url" href="/node/2020/03/05/NodeJS(4)-Express.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <h2 class="footer-heading">Daren&#39;s Daliy</h2>
+        <ul class="contact-list">
+          <li class="p-name">黑大任</li>
+          <li><a class="u-email" href="mailto:heidaren0000@gmail.com">heidaren0000@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>我们刚刚来到山脚. 前路漫漫, 可惜不是所有人都能够一览群山. We just at foot of mountain. It still a long way to go, what a pity that not everyone could up to the top.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

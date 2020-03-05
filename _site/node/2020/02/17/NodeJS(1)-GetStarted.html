@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>NodeJS(一) 开始 | Daren’s Daliy</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="NodeJS(一) 开始" />
+<meta name="author" content="黑大任" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="0. 简介" />
+<meta property="og:description" content="0. 简介" />
+<link rel="canonical" href="http://localhost:4000/node/2020/02/17/NodeJS(1)-GetStarted.html" />
+<meta property="og:url" content="http://localhost:4000/node/2020/02/17/NodeJS(1)-GetStarted.html" />
+<meta property="og:site_name" content="Daren’s Daliy" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-02-17T09:20:00+08:00" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/node/2020/02/17/NodeJS(1)-GetStarted.html","headline":"NodeJS(一) 开始","dateModified":"2020-02-17T09:20:00+08:00","datePublished":"2020-02-17T09:20:00+08:00","author":{"@type":"Person","name":"黑大任"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/node/2020/02/17/NodeJS(1)-GetStarted.html"},"description":"0. 简介","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Daren's Daliy" /></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Daren&#39;s Daliy</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/">Posts</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">NodeJS(一) 开始</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-02-17T09:20:00+08:00" itemprop="datePublished">Feb 17, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="0-简介">0. 简介</h2>
+
+<p>NodeJS 可以帮助你在本地运行 JavaScript 文件. 说白了就是异步的本地的 js 运行环境. 运行在服务器上</p>
+
+<p>由于 Node 的性能优异, 所以被用来搭建各种后端 API, 是搭建高伸缩性(Highly-scalable), 数据密集型(data-intensive)和实时app(real-time apps) 的理想工具.</p>
+
+<ul>
+  <li>适合原型设计(prototyping)和敏捷开发(agile development)</li>
+  <li>速度快, 可扩展性高(highly scalable)</li>
+  <li>使用 JavaScript</li>
+  <li>整洁连贯的代码</li>
+  <li>强大的开源生态</li>
+</ul>
+
+<h2 id="1-node-架构-node-architecture">1. Node 架构 (Node Architecture)</h2>
+
+<p>JavaScript 被广泛用在前端开发领域,  这时 JavaScript 只需要在浏览器中运行, 浏览器中内置的 JavaScript 引擎(engine) 负责把 JavaScript 的脚本语法转换成相应的机器语言.</p>
+
+<p>在以旧版的 Microsoft Edge 浏览器中, 使用的是 Chakra(查克拉) 引擎, 而 Firefox 使用的是 SpiderMonkey 引擎, 在 Chrome 中使用的则是 V8 引擎. 所以在不同的浏览器中, 同样的 JS 代码可能产生不同的行为. 浏览器中同时还提供了 JavaScript 的运行环境(Runtime), 我们经常使用的 window 对象就是运行环境(Runtime)的一部分.</p>
+
+<p>事实上, 在 2009 年之前, JS 只能在浏览器中运行, 而这时, Node 诞生了.</p>
+
+<p>Ryan Dahl 将 Google v8 引擎内嵌在了一个名叫 <code class="highlighter-rouge">Node.exe</code> 的<code class="highlighter-rouge">C++</code>可执行文件中, 这个程序就是全新的 JavaScript 运行环境(Runtime). 这个运行环境跟浏览器的运行环境不一样, 没有像 <code class="highlighter-rouge">window</code> 这样的对象, 而且有自己的对象, 比如 <code class="highlighter-rouge">fs</code> 用来访问文件系统, <code class="highlighter-rouge">http</code> 用来创建连接等. 这些东西可不能在浏览器里面运行😂.</p>
+
+<p>总而言之, Node 集成了 JS 引擎, 外加运行环境, 包含了一些在浏览器中不能实现的模块.</p>
+
+<h3 id="node-不是编程语言">Node 不是编程语言</h3>
+
+<p>有的同学可能会拿 Node 和 C#, PHP 来对比, 但是 Node 实际上不是编程语言.</p>
+
+<p>而且 Node 也不应该跟 ASP.NET, J2EE 这些框架(framework) 来表, 因为 Node 根本就不是框架…</p>
+
+<p><strong>Node 只是执行 JS 语句的运行环境</strong></p>
+
+<h2 id="2-node-如何工作-how-node-works">2. Node 如何工作? (How Node Works?)</h2>
+
+<p>刚才提到 Node 具有高伸缩性(Highly-scalable)的特性, 这主要是借助于 Node 不阻断(Non-blocking), 异步(Asynchronous)的特性.</p>
+
+<h3 id="什么是异步asynchronous">什么是异步(Asynchronous)?</h3>
+
+<p>可以用服务员来解释这个问题.</p>
+
+<p>假设有一个服务员, 这时来了两桌客人, 那么异步(Asynchronous)的服务员会把第一桌客人的订单先送到厨房, 在厨师准备第一桌的时候帮第二桌点菜, 而不必等到厨师做完第一桌再问第二桌客人.</p>
+
+<p>假如这个服务员是同步(synchronous)的, 那就比较费劲了, 先给第一桌客人点菜, 然后就一直等到厨房做完第一桌的菜, 再给第一桌上菜, 最后再给第二桌点菜, 这时候估计是人家第二桌都饿死了.</p>
+
+<p>所以“非阻断(Non-blocking)”或者叫“异步(Asynchronous)”架构更占优势, “服务员”就是单个 CPU 线程, “客人”对应的就是各种请求.</p>
+
+<p>而“同步(synchronous)”最大的问题就是他在运行时即使把所有的线程都占满, 而且效果甚至还不如异步. 新的请求只能等待空闲, 两边都不讨好. 像 ASP.NET 这样的框架, 默认就是这么工作的. 要是你想要切换到异步的架构, 那你还要做大量工作. 而 NodeJS 默认就是异步架构, 省去了很多麻烦.</p>
+
+<p>当 NodeJS 收到像查询数据库这种请求时, 不必等待数据库返回数据, 当数据库正在进行处理时, Node JS 会处理接下来的请求. 当数据库最终处理完了数据, 会通过 EventQueue 对Node JS 进行通知. Node 一直在后台监控这个队列, 直到发现有数据更新时, 将数据取出, 再进行处理. 这种异步的处理机制让 Node JS 成为了 I/O 密集型(I/O scalable)应用的理想解决方案. 在服务器算力有限的情况下, 可以处理更多客户端的数据.</p>
+
+<p>但是 Node JS 并不适合来计算密集型(CPU scalable)的应用,  比如视频/照片处理的服务器. 这些吃的主要是 CPU, 而对文件系统和网络压力很小. 而 Node JS 是单线程的, 当处理一个请求的计算时, 其他的请求所需要的计算必须等待. 所以 Node 在这上面不占优势.</p>
+
+
+  </div><a class="u-url" href="/node/2020/02/17/NodeJS(1)-GetStarted.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <h2 class="footer-heading">Daren&#39;s Daliy</h2>
+        <ul class="contact-list">
+          <li class="p-name">黑大任</li>
+          <li><a class="u-email" href="mailto:heidaren0000@gmail.com">heidaren0000@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>我们刚刚来到山脚. 前路漫漫, 可惜不是所有人都能够一览群山. We just at foot of mountain. It still a long way to go, what a pity that not everyone could up to the top.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
