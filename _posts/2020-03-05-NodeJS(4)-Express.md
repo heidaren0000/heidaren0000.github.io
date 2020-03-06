@@ -52,7 +52,7 @@ const app = express();
 app.get('/', (req, res) => { // route
     res.send('<title>Helloworld</title>Helloworld'); // route handler
 });
-app.listen('3000', () => console.log('Listening on por 3000'));
+app.listen('3000', () => console.log('Listening on port 3000'));
 
  ```
 
