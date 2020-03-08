@@ -1,7 +1,7 @@
 ---
 layout: post
 title: NodeJS(六) 异步
-date: 2020-03-07 23:53:00 +0800
+date: 2020-03-08 23:53:00 +0800
 authorize: Daren
 categories: Node
 nutshell: Node 中的异步操作
